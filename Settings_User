@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Plantilla Base UI</title>
+
+  <!-- Manrope -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Espaciado / medidas */
+      --gap:24px; 
+      --row-gap:20px;
+      --r:16px;                /* radio global para tarjetas / botones */
+      --bd:#d1d5db;            /* color de borde neutro */
+
+      /* Estado / feedback */
+      --error:#ef4444; 
+      --ok:#0ea5a4;
+
+      /* Tipografía */
+      --font:'Manrope', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      /* Colores tipográficos */
+      --txt-h:#111827;         /* títulos */
+      --txt-body:#374151;      /* texto interior */
+      --txt-btn:#ffffff;       /* texto botón primario */
+      --muted:#6b7280;         /* gris para detalles */
+
+      /* Header + barra fija */
+      --btn-h:40px;
+      --actions-bar-h:72px;
+    }
+
+    /* Reset mínimo + box model */
+    *{ box-sizing:border-box; }
+    html, body { height:100%; }
+    body{
+      margin:0;
+      font:16px/1.25 var(--font);
+      color:var(--txt-body);
+      background:#F3F4F6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    button, input, select, textarea { font: inherit; }
+
+    /* -------- Header -------- */
+    .page-h{ background:#F3F4F6; border-bottom:1px solid transparent; }
+    .page-h-inner{
+      max-width:1100px; margin:0 auto; padding:16px 24px 0 24px;
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+    }
+    .page-h-left{ display:flex; align-items:center; gap:12px; }
+    .page-title{
+      margin:0; font-style:normal; font-weight:700;
+      color:var(--txt-h); font-size:20px; line-height:28px;
+    }
+    .cta{
+      border-radius:8px; height:var(--btn-h);
+      padding:0 16px; border:1px solid transparent; background:#001BD0;
+      color:var(--txt-btn); cursor:pointer;
+      font-weight:500; font-size:14px; line-height:20px;
+      display:inline-flex; align-items:center; justify-content:center;
+    }
+    .cta:hover{ filter:brightness(.95) }
+
+    /* Botón flecha (volver) */
+    .icon-btn{
+      width:var(--btn-h); height:var(--btn-h);
+      border:1px solid var(--bd); background:#fff; border-radius:var(--r);
+      display:inline-grid; place-items:center; padding:0; cursor:pointer;
+    }
+    .icon-btn:hover{ background:#f3f4f6; }
+    .icon-btn svg{ width:20px; height:20px; }
+
+    /* -------- Layout -------- */
+    .main{ min-height:100vh; padding:16px 24px calc(var(--gap) + var(--actions-bar-h)); }
+    .container{ max-width:1100px; margin:0 auto; }
+
+    /* -------- Card / Secciones -------- */
+    .card{ border:1px solid var(--bd); border-radius:var(--r); background:#fff; overflow:hidden; }
+    /* Permitir que el menú de LADA se vea completo en el form */
+    #formSection.card, #formSection .card-b{ overflow:visible; }
+
+    .card-h{ padding:16px 24px; background:#f8fafc; border-bottom:1px solid var(--bd); }
+    /* Redondeo correcto del encabezado de tarjetas en form y detalle */
+    #formSection .card-h,
+    #detailSection .card-h{
+      border-top-left-radius: var(--r);
+      border-top-right-radius: var(--r);
+      background-clip: padding-box;
+    }
+    .card-title{
+      margin:0; font-style:normal; font-weight:600; color:var(--txt-h);
+      font-size:14px; line-height:20px;
+    }
+    .card-b{ padding:24px; }
+
+    /* -------- Grillas simples -------- */
+    .row{ display:flex; gap:20px; flex-wrap:wrap }
+    .row + .row{ margin-top: var(--row-gap); }
+    .col{ flex:1 1 320px; min-width:260px }
+
+    /* -------- Formularios -------- */
+    label{
+      display:block; margin:0 0 8px;
+      font-weight:500; color:var(--txt-body);
+      font-size:14px; line-height:20px;
+    }
+    .input{
+      display:flex; align-items:center; gap:8px; height:40px;
+      padding:0 12px; border:1px solid var(--bd); border-radius:8px;
+      background:#fff;
+    }
+    input[type=text], input[type=email], input[type=tel]{
+      border:0; outline:0; width:100%; background:transparent;
+      font-weight:500; color:var(--txt-body);
+      font-size:14px; line-height:20px;
+    }
+    input::placeholder{
+      font-weight:400; color:#6b7280;
+      font-size:14px; line-height:20px; opacity:1;
+    }
+
+    /* Validación */
+    .input.invalid{ border-color:var(--error); }
+    .hint{ display:none; margin:6px 0 0; color:var(--error); font-weight:400; font-size:14px; }
+    .input.invalid + .hint{ display:block; }
+    .input-group.invalid .input{ border-color: var(--error); }
+    .input-group.invalid + .hint{ display:block; }
+
+    /* Teléfono combinado */
+    .input-group{ display:flex; align-items:center; }
+    .input-group .input{ height:40px; padding:0 0px; }
+    .input-cc{ border-right:0; border-top-right-radius:0; border-bottom-right-radius:0; padding-left:0; position:relative; overflow:visible; }
+    .input-phone{ border-left:0; flex:1; border-top-left-radius:0; border-bottom-left-radius:0; }
+
+    /* Dropdown de LADA (custom) — solo MX/US */
+    .cc-trigger{
+      width:100%; height:38px; display:flex; align-items:center; justify-content:space-between;
+      gap:8px; padding:0 12px; background:#fff; border:0; cursor:pointer; border-radius:8px;
+    }
+    /* Oscurecer el botón al hover (propio y mediante el contenedor) */
+    .input-cc:hover .cc-trigger,
+    .cc-trigger:hover{ background:#f3f4f6; }
+    .cc-trigger .left{ display:flex; align-items:center; gap:8px; }
+    .cc-flag{ font-size:18px; line-height:1; }
+    .cc-code{ font-weight:400; font-size:14px; line-height:20px; }
+    .cc-caret{ width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:6px solid #64748b; }
+
+    .cc-menu{
+      position:absolute; top:100%; left:0; right:0; margin-top:6px;
+      background:#fff; border:1px solid var(--bd); border-radius:12px;
+      box-shadow:0 8px 24px rgba(0,0,0,.08); padding:6px 0; z-index:2000; max-height:240px; overflow:auto;
+    }
+    .cc-menu.hidden{ display:none; }
+    .cc-option{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 12px; cursor:pointer; font-weight:400; font-size:14px; line-height:20px; }
+    .cc-option:hover{ background:#f8fafc; }
+    .cc-option .label{ display:flex; align-items:center; gap:10px; }
+    .cc-option .check{ opacity:0; }
+    .cc-option.active .check{ opacity:1; color:#0f766e; font-weight:700; }
+
+    /* -------- Botones -------- */
+    .btn{
+      border-radius:8px; padding:8px 18px; border:1px solid var(--bd);
+      background:#fff; cursor:pointer; transition:background-color .15s ease, filter .15s ease;
+      font-weight:500; color:#374151; font-size:14px; line-height:20px;
+    }
+    .btn:not([disabled]):hover{ background:#f3f4f6; }
+    .btn.primary{ background:#001BD0; border-color:transparent; color:var(--txt-btn); }
+    .btn[disabled]{ background:#eef2f7; color:#64748b; cursor:not-allowed; }
+
+    /* -------- Lista (tipo reporte) -------- */
+    .list-card{ border:1px solid var(--bd); border-radius:16px; background:#fff; overflow:hidden; }
+    .list-head, .list-row{
+      display:grid; grid-template-columns: 1fr 240px; align-items:center;
+      padding:16px 24px; font-weight:500; color:var(--txt-body); font-size:14px; line-height:20px;
+    }
+    .list-head{ background:#f8fafc; font-weight:600; color:var(--txt-h); }
+    .list-row + .list-row{ border-top:1px solid #e5e7eb; }
+    .name-cell{ display:flex; align-items:center; gap:16px; }
+    .avatar{
+      width:56px; height:56px; border-radius:50%; background:#f3f4f6; border:1px solid #e5e7eb;
+      display:grid; place-items:center; font-weight:700; color:#111827;
+    }
+    .name-link{ color:var(--txt-body); font-weight:500; text-decoration:none; font-size:14px; line-height:20px; }
+    .name-link:hover{ text-decoration:underline; }
+    .badge{ justify-self:start; display:inline-flex; align-items:center; padding:6px 10px; border-radius:999px; background:#d1fae5; color:#0f766e; font-weight:500; font-size:14px; line-height:20px; }
+
+    /* -------- Detalle -------- */
+    .detail-row{ display:grid; grid-template-columns:auto 1fr auto; align-items:start; gap:16px; }
+    .detail-name{ font-weight:600; font-size:16px; line-height:24px; color:var(--txt-h); margin-bottom:4px; }
+    .detail-line{ font-weight:400; font-size:14px; line-height:20px; color:var(--muted); }
+    .detail-actions .btn{ display:inline-flex; align-items:center; gap:8px; }
+
+    /* Utilidad */
+    .hidden{ display:none !important; }
+
+    /* Lista compacta (cabecera pegada a filas) */
+    #listSection .card-h{ padding:0; }
+    #listSection .card-h .list-head{ padding:16px 24px; }
+    #listSection .card-b{ padding:0; }
+    #listSection .list-row{ padding:16px 24px; }
+
+    /* Barra fija del formulario (Guardar/Cancelar) */
+    .actions-bar{
+      position:fixed; left:0; right:0; bottom:0; height:var(--actions-bar-h);
+      background:#fff; border-top:1px solid var(--bd); z-index:60; display:flex; align-items:center;
+    }
+    .actions-bar .container{
+      max-width:1100px; margin:0 auto; width:100%;
+      padding:0 24px; display:flex; justify-content:flex-end; gap:12px;
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== Header ===== -->
+  <header class="page-h">
+    <div class="page-h-inner">
+      <div class="page-h-left">
+        <button class="icon-btn hidden" id="backBtn" aria-label="Volver" title="Volver">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <h1 class="page-title">Usuarios</h1>
+      </div>
+      <button class="cta" id="actionBtn">＋ Añadir usuario</button>
+    </div>
+  </header>
+
+  <!-- ===== Contenido ===== -->
+  <main class="main">
+    <div class="container">
+
+      <!-- ===== Vista LISTA ===== -->
+      <section class="card" id="listSection">
+        <div class="card-h">
+          <div class="list-head">
+            <div>Nombre</div>
+            <div>Estado</div>
+          </div>
+        </div>
+        <div class="card-b">
+          <div id="listRows"><!-- filas dinámicas --></div>
+        </div>
+      </section>
+
+      <!-- ===== Vista DETALLE ===== -->
+      <section class="card hidden" id="detailSection">
+        <div class="card-h"><h2 class="card-title">Datos del usuario</h2></div>
+        <div class="card-b">
+          <div class="detail-row">
+            <div class="avatar" id="dAvatar">??</div>
+            <div>
+              <div class="detail-name" id="dName">—</div>
+              <div class="detail-line" id="dPhone">—</div>
+              <div class="detail-line" id="dEmail">—</div>
+            </div>
+            <div class="detail-actions">
+              <button class="btn" id="editBtn">Editar</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Vista FORM ===== -->
+      <section class="card hidden" id="formSection">
+        <div class="card-h"><h2 class="card-title" id="formTitle">Datos del usuario</h2></div>
+        <div class="card-b">
+          <form id="userForm" novalidate>
+            <div class="row">
+              <div class="col">
+                <label for="nombre">Nombre</label>
+                <div class="input" id="wrap-nombre">
+                  <input id="nombre" type="text" placeholder="Ingresar nombre" required>
+                </div>
+                <p class="hint">Requerido</p>
+              </div>
+              <div class="col">
+                <label for="apellido">Apellido</label>
+                <div class="input" id="wrap-apellido">
+                  <input id="apellido" type="text" placeholder="Ingresar apellido" required>
+                </div>
+                <p class="hint">Requerido</p>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label for="tel">Teléfono</label>
+                <div class="input-group" id="wrap-tel">
+                  <div class="input input-cc">
+                    <!-- Dropdown custom: solo MX y US -->
+                    <button type="button" class="cc-trigger" id="ccBtn" aria-haspopup="listbox" aria-expanded="false">
+                      <span class="left"><span class="cc-flag" id="ccFlag">🇲🇽</span><span class="cc-code" id="ccText">+52</span></span>
+                      <span class="cc-caret" aria-hidden="true"></span>
+                    </button>
+                    <ul class="cc-menu hidden" id="ccMenu" role="listbox">
+                      <li class="cc-option active" data-cc="52" data-flag="🇲🇽" role="option" aria-selected="true">
+                        <span class="label"><span class="cc-flag">🇲🇽</span><span>+52</span></span>
+                        <span class="check">✓</span>
+                      </li>
+                      <li class="cc-option" data-cc="1" data-flag="🇺🇸" role="option" aria-selected="false">
+                        <span class="label"><span class="cc-flag">🇺🇸</span><span>+1</span></span>
+                        <span class="check">✓</span>
+                      </li>
+                    </ul>
+                    <input type="hidden" id="cc" name="cc" value="52">
+                  </div>
+                  <div class="input input-phone">
+                    <input id="tel" type="tel" inputmode="numeric" placeholder="Ingresar teléfono" required>
+                  </div>
+                </div>
+                <p class="hint">El número ingresado no es válido.</p>
+              </div>
+              <div class="col">
+                <label for="mail">Email</label>
+                <div class="input" id="wrap-mail">
+                  <input id="mail" type="email" placeholder="Ingresar email" required>
+                </div>
+                <p class="hint">Email inválido</p>
+              </div>
+            </div>
+
+            <input type="hidden" id="recordId" value="">
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===== Barra de acciones fija ===== -->
+  <div class="actions-bar hidden" id="formActions">
+    <div class="container">
+      <button type="button" class="btn" id="cancelBtn">Cancelar</button>
+      <button type="submit" class="btn primary" id="saveBtn" form="userForm" disabled>Guardar</button>
+    </div>
+  </div>
+
+  <!-- ========= SCRIPT ========= -->
+  <script>
+    /** ================== Estado (con ejemplos) ================== */
+    const state = {
+      users: [
+        { id: 1, nombre: 'Ana',  apellido: 'García', cc: '52', tel: '5512345678', mail: 'ana@example.com',  lastLogin: '10/09/2025 09:24' },
+        { id: 2, nombre: 'Luis', apellido: 'Pérez',  cc: '52', tel: '5540097788', mail: 'luis@example.com', lastLogin: null },
+        { id: 3, nombre: 'María',apellido: 'López',  cc: '1',  tel: '4157789911', mail: 'maria@example.com', lastLogin: '15/09/2025 18:05' }
+      ],
+      currentId: null,
+      view: 'list'
+    };
+    let seq = (state.users.length ? Math.max(...state.users.map(u => u.id)) + 1 : 1);
+
+    /** ================== Helpers UI / DOM ================== */
+    const $  = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+    const scrollTop = () => window.scrollTo({ top:0, behavior:'auto' });
+
+    const sections = { list:$('#listSection'), detail:$('#detailSection'), form:$('#formSection') };
+    const headerBtn = $('#actionBtn');
+    const backBtn   = $('#backBtn');
+    const pageTitle = $('.page-title');
+
+    // Form refs
+    const form = $('#userForm');
+    const saveBtn = $('#saveBtn');
+    const cancelBtn = $('#cancelBtn');
+    const formTitle = $('#formTitle');
+    const formActions = $('#formActions');
+
+    // CC dropdown custom
+    const ccBtn = $('#ccBtn');
+    const ccMenu = $('#ccMenu');
+    const ccHidden = $('#cc');
+    const ccText = $('#ccText');
+    const ccFlag = $('#ccFlag');
+
+    const inNombre = $('#nombre');
+    const inApellido = $('#apellido');
+    const inCC = $('#cc'); // hidden
+    const inTel = $('#tel');
+    const inMail = $('#mail');
+    const hiddenId = $('#recordId');
+
+    // Detalle refs
+    const dAvatar = $('#dAvatar');
+    const dName = $('#dName');
+    const dPhone = $('#dPhone');
+    const dEmail = $('#dEmail');
+    const editBtn = $('#editBtn');
+
+    // Lista
+    const listRows = $('#listRows');
+
+    /** ================== Utilidades de datos ================== */
+    const initials = (n,a)=>{
+      const t = `${(n||'').trim()} ${(a||'').trim()}`.trim();
+      if (!t) return '??';
+      const p = t.split(/\s+/).filter(Boolean);
+      return ((p[0]?.[0]||'') + (p[1]?.[0]||p[0]?.[1]||'')).toUpperCase();
+    };
+    const fullName = (u)=> [u.nombre, u.apellido].filter(Boolean).join(' ') || '(Sin nombre)';
+    const displayPhone = (cc, tel)=> (cc ? `+${cc}` : '') + String(tel||'');
+    const isEmail = (s)=> /^[A-Za-z0-9._%+-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}$/.test(String(s||''));
+    const onlyDigits = (s)=> String(s||'').replace(/\D/g,'');
+
+    /** ================== CC Dropdown (logic) ================== */
+    function setCC(code, flag){
+      const cc = String(code||'').trim();
+      const fl = flag && flag.trim() ? flag : (cc === '1' ? '🇺🇸' : '🇲🇽');
+      ccHidden.value = cc;
+      ccText.textContent = '+'+cc;
+      ccFlag.textContent = fl;
+      ccMenu.querySelectorAll('.cc-option').forEach(li=>{
+        const active = li.dataset.cc === cc;
+        li.classList.toggle('active', active);
+        li.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+    if (ccBtn && ccMenu){
+      ccBtn.addEventListener('click', ()=>{
+        const isHidden = ccMenu.classList.contains('hidden');
+        ccMenu.classList.toggle('hidden', !isHidden);
+        ccBtn.setAttribute('aria-expanded', String(isHidden));
+      });
+      ccMenu.addEventListener('click', (e)=>{
+        const li = e.target.closest('.cc-option');
+        if (!li) return;
+        setCC(li.dataset.cc, li.dataset.flag);
+        ccMenu.classList.add('hidden');
+        ccBtn.setAttribute('aria-expanded', 'false');
+        validateField('tel'); // revalida porque la LADA afecta el teléfono
+        updateSaveEnabled();
+      });
+      document.addEventListener('click', (e)=>{
+        if (!ccMenu.contains(e.target) && !ccBtn.contains(e.target)){
+          ccMenu.classList.add('hidden');
+          ccBtn.setAttribute('aria-expanded','false');
+        }
+      });
+    }
+
+    /** ================== Validación con touched/dirty ================== */
+    const touched = { nombre:false, apellido:false, tel:false, mail:false };
+    const initialValues = { nombre:'', apellido:'', mail:'', tel:'', cc:'' };
+
+    function snapshotInitialFromUser(u){
+      initialValues.nombre   = (u?.nombre   || '').trim();
+      initialValues.apellido = (u?.apellido || '').trim();
+      initialValues.mail     = (u?.mail     || '').trim();
+      initialValues.tel      = String(u?.tel || '');
+      initialValues.cc       = String(u?.cc  || '');
+    }
+    function snapshotInitialFromForm(){ // para modo creación (normalmente vacío)
+      initialValues.nombre = (inNombre.value || '').trim();
+      initialValues.apellido = (inApellido.value || '').trim();
+      initialValues.mail = (inMail.value || '').trim();
+      initialValues.tel = onlyDigits(inTel.value || '');
+      initialValues.cc  = String(inCC.value || '');
+    }
+
+    function isFieldValid(name, data){
+      switch(name){
+        case 'nombre':   return !!data.nombre;
+        case 'apellido': return !!data.apellido;
+        case 'tel':      return data.tel.length >= 10; // 10 dígitos
+        case 'mail':     return isEmail(data.mail);
+        default:         return true;
+      }
+    }
+    function isDirty(name, data){
+      switch(name){
+        case 'tel':      return data.tel !== initialValues.tel || data.cc !== initialValues.cc;
+        case 'mail':     return data.mail !== initialValues.mail;
+        case 'nombre':   return data.nombre !== initialValues.nombre;
+        case 'apellido': return data.apellido !== initialValues.apellido;
+        default:         return true;
+      }
+    }
+    function setInvalidUI(name, invalid){
+      const map = { nombre:'#wrap-nombre', apellido:'#wrap-apellido', tel:'#wrap-tel', mail:'#wrap-mail' };
+      const el = document.querySelector(map[name]);
+      if (el) el.classList.toggle('invalid', invalid); // para tel el wrapper es .input-group
+    }
+    function readForm(){
+      return {
+        id: hiddenId.value ? Number(hiddenId.value) : null,
+        nombre: inNombre.value.trim(),
+        apellido: inApellido.value.trim(),
+        cc: String(inCC.value || '').trim(),
+        tel: onlyDigits(inTel.value),
+        mail: inMail.value.trim()
+      };
+    }
+    function validateField(name, {mark=true} = {}){
+      const data  = readForm();
+      const valid = isFieldValid(name, data);
+      const dirty = isDirty(name, data);
+      if (mark && touched[name] && dirty){
+        setInvalidUI(name, !valid);
+      }
+      return valid;
+    }
+    function allValid(){
+      const data = readForm();
+      return ['nombre','apellido','tel','mail'].every(n => isFieldValid(n, data));
+    }
+    function anyChanged(){
+      const d = readForm();
+      if (d.id == null) return true; // en creación basta con ser válido
+      return (
+        d.nombre   !== initialValues.nombre ||
+        d.apellido !== initialValues.apellido ||
+        d.mail     !== initialValues.mail ||
+        d.tel      !== initialValues.tel ||
+        d.cc       !== initialValues.cc
+      );
+    }
+    function updateSaveEnabled(){
+      saveBtn.disabled = !(allValid() && anyChanged());
+    }
+
+    /** ================== Navegación de vistas ================== */
+    function show(view){
+      state.view = view;
+      for (const k of Object.keys(sections)){
+        sections[k].classList.toggle('hidden', k !== view);
+      }
+      // Controles de header + barra fija
+      backBtn.classList.toggle('hidden', state.view === 'list');
+      headerBtn.classList.toggle('hidden', state.view !== 'list');
+      formActions.classList.toggle('hidden', state.view !== 'form');
+      scrollTop();
+    }
+
+    /** ================== Render: Lista ================== */
+    function renderList(){
+      if (!state.users.length){
+        listRows.innerHTML = `<div class="list-row"><div style="opacity:.7">Sin registros</div><div></div></div>`;
+        return;
+      }
+      listRows.innerHTML = state.users.map(u => `
+        <div class="list-row">
+          <div class="name-cell">
+            <div class="avatar">${initials(u.nombre, u.apellido)}</div>
+            <a href="#" class="name-link" data-id="${u.id}">${fullName(u)}</a>
+          </div>
+          <div><span class="badge">${u.lastLogin ? 'Activo' : 'Pendiente'}</span></div>
+        </div>
+      `).join('');
+
+      // Click en nombres -> detalle
+      $$('.name-link', listRows).forEach(a => {
+        a.addEventListener('click', (e)=>{
+          e.preventDefault();
+          const id = Number(a.getAttribute('data-id'));
+          openDetail(id);
+        });
+      });
+    }
+
+    /** ================== Render: Detalle ================== */
+    function renderDetail(u){
+      dAvatar.textContent = initials(u.nombre, u.apellido);
+      dName.textContent = fullName(u);
+      dPhone.textContent = displayPhone(u.cc, u.tel) || '—';
+      dEmail.textContent = u.mail || '—';
+    }
+
+    /** ================== Form: helpers ================== */
+    function clearForm(){
+      form.reset();
+      hiddenId.value = '';
+      $$('#wrap-nombre, #wrap-apellido, #wrap-mail, #wrap-tel').forEach(w => w?.classList.remove('invalid'));
+      // Estado de interacción
+      Object.keys(touched).forEach(k => touched[k] = false);
+      // Valores iniciales (creación)
+      setCC('52','🇲🇽');
+      snapshotInitialFromForm();
+      // Botón Guardar
+      saveBtn.disabled = true;
+      formTitle.textContent = 'Datos del usuario';
+    }
+    function fillForm(u){
+      hiddenId.value = u.id;
+      inNombre.value = u.nombre || '';
+      inApellido.value = u.apellido || '';
+      inCC.value = u.cc || '52';
+      inTel.value = u.tel || '';
+      inMail.value = u.mail || '';
+      setCC(inCC.value, inCC.value === '1' ? '🇺🇸' : '🇲🇽');
+      // reset touched y valores iniciales (edición)
+      Object.keys(touched).forEach(k => touched[k] = false);
+      snapshotInitialFromUser(u);
+      // Guardar deshabilitado hasta que haya cambios válidos
+      saveBtn.disabled = true;
+      formTitle.textContent = 'Datos del usuario';
+    }
+
+    /** ================== Acciones: abrir vistas ================== */
+    function openList(){
+      pageTitle.textContent = 'Usuarios';
+      show('list');
+      renderList();
+    }
+    function openDetail(id){
+      const u = state.users.find(x => x.id === id);
+      if (!u){ openList(); return; }
+      state.currentId = id;
+      renderDetail(u);
+      pageTitle.textContent = 'Detalle de usuario';
+      show('detail');
+    }
+    function openFormCreate(){
+      state.currentId = null;
+      clearForm();
+      pageTitle.textContent = 'Añadir usuario';
+      show('form');
+    }
+    function openFormEdit(id){
+      const u = state.users.find(x => x.id === id);
+      if (!u){ openList(); return; }
+      state.currentId = id;
+      fillForm(u);
+      pageTitle.textContent = 'Detalle de usuario';
+      show('form');
+    }
+
+    /** ================== Handlers ================== */
+    headerBtn.addEventListener('click', openFormCreate);
+    backBtn.addEventListener('click', openList);
+    editBtn.addEventListener('click', ()=> state.currentId != null && openFormEdit(state.currentId));
+    cancelBtn.addEventListener('click', ()=>{
+      const id = hiddenId.value ? Number(hiddenId.value) : null;
+      if (id != null) openDetail(id); else openList();
+    });
+
+    // touched
+    const idToName = { nombre:'nombre', apellido:'apellido', tel:'tel', mail:'mail' };
+    form.addEventListener('focusin', (e)=>{
+      const n = idToName[e.target.id];
+      if (n) touched[n] = true;
+    });
+    // validar por campo + habilitar Guardar reactivo
+    form.addEventListener('input', (e)=>{
+      const n = idToName[e.target.id];
+      if (n){
+        validateField(n);
+        updateSaveEnabled();
+      }
+    });
+    form.addEventListener('focusout', (e)=>{
+      const n = idToName[e.target.id];
+      if (n){
+        validateField(n);
+        updateSaveEnabled();
+      }
+    });
+
+    // Dropdown LADA (abrir/cerrar ya configurado arriba) — cerrar con Esc
+    document.addEventListener('keydown', (e)=>{
+      if (e.key === 'Escape'){
+        ccMenu.classList.add('hidden');
+        ccBtn.setAttribute('aria-expanded','false');
+      }
+    });
+
+    // Guardar (crear/editar en memoria)
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      // marca todos como tocados para forzar hints si algo está mal
+      ['nombre','apellido','tel','mail'].forEach(n => { touched[n] = true; validateField(n); });
+      updateSaveEnabled();
+      if (saveBtn.disabled) return;
+
+      const d = readForm();
+
+      if (d.id == null){
+        // Crear
+        const newUser = {
+          id: seq++,
+          nombre: d.nombre, apellido: d.apellido,
+          cc: d.cc, tel: d.tel, mail: d.mail,
+          lastLogin: null
+        };
+        state.users.push(newUser);
+      } else {
+        // Editar
+        const u = state.users.find(x => x.id === d.id);
+        if (u){
+          u.nombre = d.nombre; u.apellido = d.apellido;
+          u.cc = d.cc; u.tel = d.tel; u.mail = d.mail;
+        }
+      }
+      openList();
+    });
+
+    /** ================== Boot ================== */
+    (function boot(){ openList(); })();
+  </script>
+</body>
+</html>
